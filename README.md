@@ -76,8 +76,8 @@ nomnownow/
 - ✅ Team organization and responsibilities
 - ✅ Placeholder website
 - ✅ Project vision documented
-- ⏳ GitHub Pages deployment (pending)
-- ⏳ Instructor invited to repository (pending)
+- ✅ GitHub Pages deployment 
+- ✅ Instructor invited to repository 
 
 ---
 
