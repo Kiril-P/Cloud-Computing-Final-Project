@@ -83,7 +83,7 @@ nomnownow/
 
 ## 🔗 Links
 
-- **GitHub Pages**: *To be added after deployment*
+- **GitHub Pages**: https://kiril-p.github.io/Cloud-Computing-Final-Project/
 - **Course**: Cloud Computing (BCSAI2025N-CSAI.2.M.A_C2_493749)
 - **Instructor**: Eduardo Rodríguez Lorenzo
 - **Institution**: IE University
