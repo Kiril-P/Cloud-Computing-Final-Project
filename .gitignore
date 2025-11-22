@@ -1,0 +1,31 @@
+# Operating System
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+*.egg-info/
+
+# Azure
+local.settings.json
+.python_packages/
+
+# Environment variables
+.env
+*.env
+
+# Logs
+*.log
+
+# Secrets
+*.key
+*.pem
+credentials.json
