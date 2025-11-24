@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudBites · Restaurant</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="js/api.js"></script>
+  <script defer src="js/restaurant.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="brand">
+        <span class="logo"></span>
+        <h1>CloudBites · Restaurant</h1>
+      </div>
+      <a class="btn" href="index.html">Home</a>
+    </div>
+
+    <div class="grid cols-2">
+      <form id="mealForm" class="card">
+        <h2>Register / Update a Meal</h2>
+        <div>
+          <label>Restaurant name</label>
+          <input id="restaurantName" required placeholder="e.g., Saffron Kitchen">
+        </div>
+        <div>
+          <label>Dish name</label>
+          <input id="dishName" required placeholder="e.g., Butter Chicken">
+        </div>
+        <div>
+          <label>Description</label>
+          <textarea id="description" rows="3" placeholder="Short notes or dietary info"></textarea>
+        </div>
+        <div class="grid cols-2">
+          <div>
+            <label>Prep time (minutes)</label>
+            <input id="prepMinutes" type="number" min="1" step="1" required placeholder="15">
+          </div>
+          <div>
+            <label>Price (€)</label>
+            <input id="price" type="number" min="0" step="0.01" required placeholder="9.90">
+          </div>
+        </div>
+        <div class="grid cols-2">
+          <div>
+            <label>Delivery area</label>
+            <select id="area" required>
+              <option value="">Select an area</option>
+              <option>Central</option>
+              <option>North</option>
+              <option>South</option>
+            </select>
+          </div>
+          <div>
+            <label>Image URL (optional)</label>
+            <input id="imageUrl" placeholder="https://...">
+          </div>
+        </div>
+        <div class="space-between">
+          <button type="submit">Save meal</button>
+          <span class="small">Data will be stored in Azure Table via HTTP Function</span>
+        </div>
+        <div id="formMsg" class="notice hidden"></div>
+      </form>
+
+      <div class="card">
+        <h3>Recently submitted (local preview)</h3>
+        <p class="small">This list mirrors your last entries in localStorage for Milestone 3 testing.</p>
+        <table class="table" id="recentTable">
+          <thead><tr><th>Dish</th><th>Area</th><th>Prep</th><th>Price</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>© CloudBites 2025</footer>
+  </div>
+</body>
+</html>

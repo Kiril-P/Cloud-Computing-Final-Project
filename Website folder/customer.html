@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudBites · Customer</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="js/api.js"></script>
+  <script defer src="js/customer.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="brand">
+        <span class="logo"></span>
+        <h1>CloudBites · Customer</h1>
+      </div>
+      <a class="btn" href="index.html">Home</a>
+    </div>
+
+    <div id="step-browse" class="card">
+      <div class="row" style="justify-content:space-between;">
+        <div>
+          <label>Choose delivery area</label>
+          <select id="areaSelect">
+            <option>Central</option>
+            <option>North</option>
+            <option>South</option>
+          </select>
+        </div>
+        <button id="loadMealsBtn">Load meals</button>
+      </div>
+      <hr>
+      <div id="mealsList" class="grid cols-2"></div>
+    </div>
+
+    <div id="step-checkout" class="card hidden">
+      <h2>Checkout</h2>
+      <div id="cartSummary"></div>
+      <div class="grid cols-2">
+        <div>
+          <label>Your name</label>
+          <input id="custName" required placeholder="e.g., Alex Doe">
+        </div>
+        <div>
+          <label>Address</label>
+          <input id="custAddress" required placeholder="Street, number, floor">
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div>
+          <label>Delivery area</label>
+          <select id="custArea">
+            <option>Central</option>
+            <option>North</option>
+            <option>South</option>
+          </select>
+        </div>
+        <div>
+          <label>Phone (optional)</label>
+          <input id="custPhone" placeholder="+34 600 000 000">
+        </div>
+      </div>
+      <div class="space-between">
+        <button id="submitOrderBtn">Place order</button>
+        <a class="button" href="#" id="backToBrowse">Back to meals</a>
+      </div>
+      <div id="orderMsg" class="notice hidden"></div>
+    </div>
+
+    <div id="step-confirm" class="card hidden">
+      <h2>Order confirmed 🎉</h2>
+      <p id="confirmDetails"></p>
+      <a class="button" href="customer.html">Place another order</a>
+    </div>
+
+    <footer>© CloudBites 2025</footer>
+  </div>
+</body>
+</html>
