@@ -1,132 +1,128 @@
-import type { Restaurant, MenuItem, Customer, Order, Area } from '../types';
+// src/utils/mockData.ts
+import {
+  TableClient,
+  AzureSASCredential,
+} from "@azure/data-tables";
+import type { Restaurant, MenuItem, Customer, Order, Area } from "../types";
 
-const areas: Area[] = ['North', 'East', 'West'];
+// .env (root of project):
+// VITE_STORAGE_ACCOUNT_NAME=group2database
+// VITE_TABLES_SAS=?sv=... (SAS token with table read/write as needed)
+const accountName = import.meta.env.VITE_STORAGE_ACCOUNT_NAME;
+const sasToken = import.meta.env.VITE_TABLES_SAS!;
 
-const restaurantNames = [
-  'The Green Bistro', 'Blue Ocean Grill', 'Mountain View Cafe', 'Sunset Diner',
-  'Urban Kitchen', 'Fresh & Fast', 'Golden Plate', 'Spice Garden',
-  'Bella Italia', 'Dragon Wok'
-];
+const tableEndpoint = `https://${accountName}.table.core.windows.net`;
+const credential = new AzureSASCredential(sasToken);
 
-const mealNames = [
-  ['Grilled Salmon', 'Caesar Salad'],
-  ['Seafood Platter', 'Fish Tacos'],
-  ['Mountain Burger', 'Club Sandwich'],
-  ['Sunset Special', 'BBQ Ribs'],
-  ['Urban Bowl', 'Avocado Toast'],
-  ['Fresh Wrap', 'Power Smoothie Bowl'],
-  ['Golden Steak', 'Chicken Parmesan'],
-  ['Spicy Curry', 'Tandoori Chicken'],
-  ['Margherita Pizza', 'Pasta Carbonara'],
-  ['Kung Pao Chicken', 'Sweet & Sour Pork']
-];
+// ---- TABLE CLIENTS (your real table names) ----
+const restaurantTable = new TableClient(tableEndpoint, "RestaurantTable", credential);
+const menuTable       = new TableClient(tableEndpoint, "MenuTable", credential);
+const customerTable   = new TableClient(tableEndpoint, "CustomerTable", credential);
+const orderTable      = new TableClient(tableEndpoint, "OrderTable", credential);
 
+// If App.tsx still calls this from the old mock: keep as no-op
 export function initializeMockData() {
-  // Check if data already exists
-  if (localStorage.getItem('restaurants')) {
-    return;
+  // no seeding; data comes from Azure
+}
+
+// ---- MAPPERS: Azure entity -> your front-end types ----
+// PartitionKey = Area (North/East/West)
+
+function mapRestaurantEntity(entity: any): Restaurant {
+  return {
+    area: entity.partitionKey as Area,
+    restaurantId: entity.RestaurantID, // your column
+    name: entity.Name,
+    description: entity.Description,
+    address: entity.Address,
+    phone: entity.Phone,
+    image: entity.ImageURL ?? "",
+  };
+}
+
+function mapMenuEntity(entity: any): MenuItem {
+  return {
+    area: entity.partitionKey as Area,
+    dishId: entity.DishID,
+    restaurantId: entity.RestaurantID,
+    name: entity.Name,
+    description: entity.Description,
+    isAvailable: Boolean(entity.IsAvailable),
+    prepTime: Number(entity.PrepTime),
+    price: Number(entity.Price),
+    image: entity.ImageURL ?? "",
+  };
+}
+
+function mapCustomerEntity(entity: any): Customer {
+  return {
+    area: entity.partitionKey as Area,
+    customerId: entity.CustomerID,
+    name: entity.Name,
+    lastName: entity.LastName,
+    address: entity.Address,
+    phone: entity.Phone,
+  };
+}
+
+function mapOrderEntity(entity: any): Order {
+  return {
+    area: entity.partitionKey as Area,
+    orderId: entity.OrderID,
+    customerId: entity.CustomerID,
+    dishesOrdered:
+      typeof entity.DishesOrdered === "string"
+        ? JSON.parse(entity.DishesOrdered) // e.g. '["dish1","dish2"]'
+        : entity.DishesOrdered,
+    status: entity.Status,
+    estimatedTime: Number(entity.EstimatedTime),
+    estimatedArrival: entity.EstimatedArrival,
+    totalCost: Number(entity.TotalCost),
+    createdAt: entity.Timestamp ?? entity.timestamp,
+  };
+}
+
+// ---- PUBLIC API USED BY YOUR COMPONENTS (now async) ----
+
+export async function getRestaurants(): Promise<Restaurant[]> {
+  const results: Restaurant[] = [];
+  for await (const entity of restaurantTable.listEntities()) {
+    results.push(mapRestaurantEntity(entity));
   }
-
-  const restaurants: Restaurant[] = [];
-  const menuItems: MenuItem[] = [];
-
-  areas.forEach((area, areaIndex) => {
-    restaurantNames.forEach((name, index) => {
-      const restaurantId = `${area.toLowerCase()}-rest-${index + 1}`;
-      
-      restaurants.push({
-        area,
-        restaurantId,
-        name: `${name} (${area})`,
-        description: `Delicious food in the ${area} area`,
-        address: `${100 + index} Main Street, ${area} District`,
-        phone: `555-${areaIndex}${index}00-${1000 + index}`,
-        image: 'https://images.unsplash.com/photo-1657593088889-5105c637f2a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXN0YXVyYW50JTIwaW50ZXJpb3IlMjBkaW5pbmd8ZW58MXx8fHwxNjM4Nzk3OTR8MA&ixlib=rb-4.1.0&q=80&w=400'
-      });
-
-      // Add 2 meals for each restaurant
-      mealNames[index].forEach((mealName, mealIndex) => {
-        menuItems.push({
-          area,
-          dishId: `${restaurantId}-dish-${mealIndex + 1}`,
-          restaurantId,
-          name: mealName,
-          description: `Delicious ${mealName.toLowerCase()} prepared fresh`,
-          isAvailable: true,
-          prepTime: 15 + mealIndex * 5,
-          price: 12.99 + mealIndex * 3,
-          image: 'https://images.unsplash.com/photo-1661260652741-65340f04f2ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZWxpY2lvdXMlMjBmb29kJTIwbWVhbHxlbnwxfHx8fDE3NjM5NDgwMjd8MA&ixlib=rb-4.1.0&q=80&w=400'
-        });
-      });
-    });
-  });
-
-  // Create some sample customers
-  const customers: Customer[] = [
-    {
-      area: 'North',
-      customerId: 'cust-1',
-      name: 'John',
-      lastName: 'Doe',
-      address: '123 Oak Street, North District',
-      phone: '555-0001'
-    },
-    {
-      area: 'East',
-      customerId: 'cust-2',
-      name: 'Jane',
-      lastName: 'Smith',
-      address: '456 Pine Avenue, East District',
-      phone: '555-0002'
-    },
-    {
-      area: 'West',
-      customerId: 'cust-3',
-      name: 'Bob',
-      lastName: 'Johnson',
-      address: '789 Maple Drive, West District',
-      phone: '555-0003'
-    }
-  ];
-
-  localStorage.setItem('restaurants', JSON.stringify(restaurants));
-  localStorage.setItem('menuItems', JSON.stringify(menuItems));
-  localStorage.setItem('customers', JSON.stringify(customers));
-  localStorage.setItem('orders', JSON.stringify([]));
+  return results;
 }
 
-export function getRestaurants(): Restaurant[] {
-  const data = localStorage.getItem('restaurants');
-  return data ? JSON.parse(data) : [];
+export async function getMenuItems(): Promise<MenuItem[]> {
+  const results: MenuItem[] = [];
+  for await (const entity of menuTable.listEntities()) {
+    results.push(mapMenuEntity(entity));
+  }
+  return results;
 }
 
-export function getMenuItems(): MenuItem[] {
-  const data = localStorage.getItem('menuItems');
-  return data ? JSON.parse(data) : [];
+export async function getCustomers(): Promise<Customer[]> {
+  const results: Customer[] = [];
+  for await (const entity of customerTable.listEntities()) {
+    results.push(mapCustomerEntity(entity));
+  }
+  return results;
 }
 
-export function getCustomers(): Customer[] {
-  const data = localStorage.getItem('customers');
-  return data ? JSON.parse(data) : [];
+export async function getOrders(): Promise<Order[]> {
+  const results: Order[] = [];
+  for await (const entity of orderTable.listEntities()) {
+    results.push(mapOrderEntity(entity));
+  }
+  return results;
 }
 
-export function getOrders(): Order[] {
-  const data = localStorage.getItem('orders');
-  return data ? JSON.parse(data) : [];
-}
+// ---- OPTIONAL: stubs or real saves to Azure ----
+// For now you can leave these as no-ops if the UI only reads data.
 
-export function saveRestaurants(restaurants: Restaurant[]) {
-  localStorage.setItem('restaurants', JSON.stringify(restaurants));
-}
+export async function saveRestaurants(_restaurants: Restaurant[]) {}
 
-export function saveMenuItems(menuItems: MenuItem[]) {
-  localStorage.setItem('menuItems', JSON.stringify(menuItems));
-}
+export async function saveMenuItems(_menuItems: MenuItem[]) {}
 
-export function saveCustomers(customers: Customer[]) {
-  localStorage.setItem('customers', JSON.stringify(customers));
-}
+export async function saveCustomers(_customers: Customer[]) {}
 
-export function saveOrders(orders: Order[]) {
-  localStorage.setItem('orders', JSON.stringify(orders));
-}
+export async function saveOrders(_orders: Order[]) {}
