@@ -3,6 +3,9 @@ import { ArrowLeft, ShoppingCart, Clock, MapPin, Check, Plus, Minus, Trash2 } fr
 import type { OrderItem, Customer, Order } from '../../types';
 import { getOrders, saveOrders } from '../../utils/mockData';
 
+const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
+
+
 interface OrderSummaryProps {
   customer: Customer;
   cart: OrderItem[];
@@ -60,23 +63,50 @@ export function OrderSummary({ customer, cart, onBack, onPlaceOrder, onUpdateQua
     minute: '2-digit'
   });
 
-  const handlePlaceOrder = () => {
-    const newOrder: Order = {
-      area: customer.area,
-      orderId: `order-${Date.now()}`,
-      customerId: customer.customerId,
-      dishesOrdered: cart,
-      estimatedArrival,
-      estimatedTime,
-      status: 'pending',
-      totalCost,
-      createdAt: new Date().toISOString()
-    };
-
-    const allOrders = getOrders();
-    saveOrders([...allOrders, newOrder]);
-    setOrderPlaced(true);
+  const handlePlaceOrder = async () => {
+  const newOrder: Order = {
+    area: customer.area,
+    orderId: `order-${Date.now()}`,
+    customerId: customer.customerId,
+    dishesOrdered: cart,
+    estimatedArrival,
+    estimatedTime,
+    status: 'pending',
+    totalCost,
+    createdAt: new Date().toISOString()
   };
+
+  // send to Azure OrderApi
+  try {
+    const res = await fetch(`${API_BASE}/orderapi`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        area: newOrder.area,
+        orderId: newOrder.orderId,
+        customerId: newOrder.customerId,
+        dishesOrdered: newOrder.dishesOrdered,
+        estimatedTime: newOrder.estimatedTime,
+        estimatedArrival: newOrder.estimatedArrival,
+        // store as string in the table
+        totalCost: `${newOrder.totalCost.toFixed(2)}€`,
+        status: newOrder.status
+      })
+    });
+
+    if (!res.ok) {
+      console.error('OrderApi error', await res.text());
+    }
+  } catch (err) {
+    console.error('Failed to send order to Azure', err);
+  }
+
+  // still keep local copy so UI/history keeps working
+  const allOrders = getOrders();
+  saveOrders([...allOrders, newOrder]);
+  setOrderPlaced(true);
+};
+
 
   if (orderPlaced) {
     return (
