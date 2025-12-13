@@ -22,7 +22,37 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
     setMenuItems(restaurantMenuItems);
   }, [restaurant.restaurantId]);
 
-  const handleSaveRestaurant = () => {
+  const handleSaveRestaurant = async () => {
+    const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
+    
+    // send to azure restaurantapi
+    try {
+      const res = await fetch(`${API_BASE}/restaurantapi`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          restaurantId: formData.restaurantId,
+          area: formData.area,
+          name: formData.name,
+          description: formData.description,
+          address: formData.address,
+          phone: formData.phone,
+          imageURL: formData.image
+        })
+      });
+
+      if (!res.ok) {
+        console.error('RestaurantApi PUT error', await res.text());
+        alert('Failed to update restaurant in Azure');
+        return;
+      }
+    } catch (err) {
+      console.error('Failed to update restaurant in Azure', err);
+      alert('Failed to update restaurant in Azure');
+      return;
+    }
+
+    // update local storage for immediate ui update
     const allRestaurants = getRestaurants();
     const updatedRestaurants = allRestaurants.map(r =>
       r.restaurantId === formData.restaurantId ? formData : r
@@ -31,7 +61,39 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
     alert('Restaurant updated successfully!');
   };
 
-  const handleSaveMeal = (meal: MenuItem) => {
+  const handleSaveMeal = async (meal: MenuItem) => {
+    const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
+    
+    // send to azure menuapi
+    try {
+      const res = await fetch(`${API_BASE}/menuapi`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dishId: meal.dishId,
+          area: meal.area,
+          name: meal.name,
+          description: meal.description,
+          price: meal.price,
+          restaurantId: meal.restaurantId,
+          imageURL: meal.image,
+          isAvailable: meal.isAvailable,
+          prepTime: meal.prepTime
+        })
+      });
+
+      if (!res.ok) {
+        console.error('MenuApi PUT error', await res.text());
+        alert('Failed to update meal in Azure');
+        return;
+      }
+    } catch (err) {
+      console.error('Failed to update meal in Azure', err);
+      alert('Failed to update meal in Azure');
+      return;
+    }
+
+    // update local storage for immediate ui update
     const allMenuItems = getMenuItems();
     const updatedMenuItems = allMenuItems.map(m =>
       m.dishId === meal.dishId ? meal : m
@@ -39,6 +101,7 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
     saveMenuItems(updatedMenuItems);
     setMenuItems(menuItems.map(m => m.dishId === meal.dishId ? meal : m));
     setEditingMeal(null);
+    alert('Meal updated successfully!');
   };
 
   const handleDeleteMeal = (dishId: string) => {
@@ -50,8 +113,8 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
     }
   };
 
-  const handleAddNewMeal = () => {
-    if (!newMeal || !newMeal.name || !newMeal.price) {
+  const handleAddNewMeal = async (mealData: Partial<MenuItem>) => {
+    if (!mealData.name || mealData.price === undefined || mealData.price === null) {
       alert('Please fill in all required fields');
       return;
     }
@@ -60,19 +123,52 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
       area: formData.area,
       dishId: `${formData.restaurantId}-dish-${Date.now()}`,
       restaurantId: formData.restaurantId,
-      name: newMeal.name,
-      description: newMeal.description || '',
-      isAvailable: newMeal.isAvailable ?? true,
-      prepTime: newMeal.prepTime || 15,
-      price: newMeal.price,
-      image: newMeal.image || 'https://images.unsplash.com/photo-1661260652741-65340f04f2ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZWxpY2lvdXMlMjBmb29kJTIwbWVhbHxlbnwxfHx8fDE3NjM5NDgwMjd8MA&ixlib=rb-4.1.0&q=80&w=400'
+      name: mealData.name,
+      description: mealData.description || '',
+      isAvailable: mealData.isAvailable ?? true,
+      prepTime: mealData.prepTime || 15,
+      price: mealData.price,
+      image: mealData.image || 'https://images.unsplash.com/photo-1661260652741-65340f04f2ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZWxpY2lvdXMlMjBmb29kJTIwbWVhbHxlbnwxfHx8fDE3NjM5NDgwMjd8MA&ixlib=rb-4.1.0&q=80&w=400'
     };
 
+    const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
+    
+    // send to azure menuapi
+    try {
+      const res = await fetch(`${API_BASE}/menuapi`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          area: meal.area,
+          dishId: meal.dishId,
+          name: meal.name,
+          description: meal.description,
+          price: meal.price,
+          restaurantId: meal.restaurantId,
+          imageURL: meal.image,
+          isAvailable: meal.isAvailable,
+          prepTime: meal.prepTime
+        })
+      });
+
+      if (!res.ok) {
+        console.error('MenuApi POST error', await res.text());
+        alert('Failed to create meal in Azure');
+        return;
+      }
+    } catch (err) {
+      console.error('Failed to create meal in Azure', err);
+      alert('Failed to create meal in Azure');
+      return;
+    }
+
+    // update local storage for immediate ui update
     const allMenuItems = getMenuItems();
     const updatedMenuItems = [...allMenuItems, meal];
     saveMenuItems(updatedMenuItems);
     setMenuItems([...menuItems, meal]);
     setNewMeal(null);
+    alert('Meal added successfully!');
   };
 
   return (

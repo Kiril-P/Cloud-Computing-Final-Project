@@ -21,7 +21,7 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
   const [meals, setMeals] = useState<Partial<MenuItem>[]>([]);
   const [showMealForm, setShowMealForm] = useState(false);
 
-  const handleCreateRestaurant = () => {
+  const handleCreateRestaurant = async () => {
     if (!formData.name || !formData.address || !formData.phone) {
       alert('Please fill in all required fields');
       return;
@@ -38,12 +38,41 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
       image: formData.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop'
     };
 
+    const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
+    
+    // send restaurant to azure restaurantapi
+    try {
+      const res = await fetch(`${API_BASE}/restaurantapi`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          area: newRestaurant.area,
+          restaurantId: newRestaurant.restaurantId,
+          name: newRestaurant.name,
+          description: newRestaurant.description,
+          address: newRestaurant.address,
+          phone: newRestaurant.phone,
+          imageURL: newRestaurant.image
+        })
+      });
+
+      if (!res.ok) {
+        console.error('RestaurantApi POST error', await res.text());
+        alert('Failed to create restaurant in Azure');
+        return;
+      }
+    } catch (err) {
+      console.error('Failed to create restaurant in Azure', err);
+      alert('Failed to create restaurant in Azure');
+      return;
+    }
+
+    // update local storage for immediate ui update
     const allRestaurants = getRestaurants();
     saveRestaurants([...allRestaurants, newRestaurant]);
 
-    // Save meals if any
+    // save meals to azure if any
     if (meals.length > 0) {
-      const allMenuItems = getMenuItems();
       const newMenuItems: MenuItem[] = meals.map((meal, index) => ({
         area: formData.area as Area,
         dishId: `${restaurantId}-dish-${index + 1}`,
@@ -55,6 +84,40 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
         price: meal.price || 0,
         image: meal.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop'
       }));
+
+      // send each meal to azure menuapi
+      for (const meal of newMenuItems) {
+        try {
+          const res = await fetch(`${API_BASE}/menuapi`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              area: meal.area,
+              dishId: meal.dishId,
+              name: meal.name,
+              description: meal.description,
+              price: meal.price,
+              restaurantId: meal.restaurantId,
+              imageURL: meal.image,
+              isAvailable: meal.isAvailable,
+              prepTime: meal.prepTime
+            })
+          });
+
+          if (!res.ok) {
+            console.error('MenuApi POST error', await res.text());
+            alert(`Failed to create meal "${meal.name}" in Azure`);
+            return;
+          }
+        } catch (err) {
+          console.error('Failed to create meal in Azure', err);
+          alert(`Failed to create meal "${meal.name}" in Azure`);
+          return;
+        }
+      }
+
+      // update local storage for immediate ui update
+      const allMenuItems = getMenuItems();
       saveMenuItems([...allMenuItems, ...newMenuItems]);
     }
 
