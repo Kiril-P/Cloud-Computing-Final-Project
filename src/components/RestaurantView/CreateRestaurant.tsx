@@ -27,7 +27,15 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
       return;
     }
 
-    const restaurantId = `${formData.area?.toLowerCase()}-rest-${Date.now()}`;
+    // generate sequential restaurant id in format R001, R002, etc.
+    const allRestaurants = getRestaurants();
+    const existingIds = allRestaurants
+      .map(r => r.restaurantId)
+      .filter(id => id.match(/^R\d+$/))
+      .map(id => parseInt(id.substring(1)));
+    const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
+    const restaurantId = `R${String(maxId + 1).padStart(3, '0')}`;
+    
     const newRestaurant: Restaurant = {
       area: formData.area as Area,
       restaurantId,
@@ -68,14 +76,21 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
     }
 
     // update local storage for immediate ui update
-    const allRestaurants = getRestaurants();
     saveRestaurants([...allRestaurants, newRestaurant]);
 
     // save meals to azure if any
     if (meals.length > 0) {
+      // generate sequential dish ids in format D001, D002, etc.
+      const allMenuItems = getMenuItems();
+      const existingDishNumbers = allMenuItems
+        .map(m => m.dishId)
+        .filter(id => id.match(/^D\d+$/))
+        .map(id => parseInt(id.substring(1)));
+      const maxDishNumber = existingDishNumbers.length > 0 ? Math.max(...existingDishNumbers) : 0;
+      
       const newMenuItems: MenuItem[] = meals.map((meal, index) => ({
         area: formData.area as Area,
-        dishId: `${restaurantId}-dish-${index + 1}`,
+        dishId: `D${String(maxDishNumber + index + 1).padStart(3, '0')}`,
         restaurantId,
         name: meal.name || '',
         description: meal.description || '',
@@ -117,7 +132,6 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
       }
 
       // update local storage for immediate ui update
-      const allMenuItems = getMenuItems();
       saveMenuItems([...allMenuItems, ...newMenuItems]);
     }
 

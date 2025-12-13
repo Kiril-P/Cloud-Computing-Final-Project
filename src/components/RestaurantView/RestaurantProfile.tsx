@@ -119,9 +119,18 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
       return;
     }
 
+    // generate sequential dish id in format D001, D002, etc.
+    const allMenuItems = getMenuItems();
+    const existingDishNumbers = allMenuItems
+      .map(m => m.dishId)
+      .filter(id => id.match(/^D\d+$/))
+      .map(id => parseInt(id.substring(1)));
+    const maxDishNumber = existingDishNumbers.length > 0 ? Math.max(...existingDishNumbers) : 0;
+    const dishId = `D${String(maxDishNumber + 1).padStart(3, '0')}`;
+
     const meal: MenuItem = {
       area: formData.area,
-      dishId: `${formData.restaurantId}-dish-${Date.now()}`,
+      dishId,
       restaurantId: formData.restaurantId,
       name: mealData.name,
       description: mealData.description || '',
@@ -163,7 +172,6 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
     }
 
     // update local storage for immediate ui update
-    const allMenuItems = getMenuItems();
     const updatedMenuItems = [...allMenuItems, meal];
     saveMenuItems(updatedMenuItems);
     setMenuItems([...menuItems, meal]);
