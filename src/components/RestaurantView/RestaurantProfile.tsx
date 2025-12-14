@@ -104,13 +104,38 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
     alert('Meal updated successfully!');
   };
 
-  const handleDeleteMeal = (dishId: string) => {
-    if (confirm('Are you sure you want to delete this meal?')) {
-      const allMenuItems = getMenuItems();
-      const updatedMenuItems = allMenuItems.filter(m => m.dishId !== dishId);
-      saveMenuItems(updatedMenuItems);
-      setMenuItems(menuItems.filter(m => m.dishId !== dishId));
+  const handleDeleteMeal = async (dishId: string) => {
+    if (!confirm('Are you sure you want to delete this meal?')) {
+      return;
     }
+
+    const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
+    
+    // send delete request to azure menuapi
+    try {
+      const res = await fetch(`${API_BASE}/menuapi`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dishId })
+      });
+
+      if (!res.ok) {
+        console.error('MenuApi DELETE error', await res.text());
+        alert('Failed to delete meal in Azure');
+        return;
+      }
+    } catch (err) {
+      console.error('Failed to delete meal in Azure', err);
+      alert('Failed to delete meal in Azure');
+      return;
+    }
+
+    // update local storage for immediate ui update
+    const allMenuItems = getMenuItems();
+    const updatedMenuItems = allMenuItems.filter(m => m.dishId !== dishId);
+    saveMenuItems(updatedMenuItems);
+    setMenuItems(menuItems.filter(m => m.dishId !== dishId));
+    alert('Meal deleted successfully!');
   };
 
   const handleAddNewMeal = async (mealData: Partial<MenuItem>) => {
