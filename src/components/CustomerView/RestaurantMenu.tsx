@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft, Plus, Minus, ShoppingCart } from 'lucide-react';
 import type { Restaurant, MenuItem, OrderItem, Customer } from '../../types';
 import { getMenuItems } from '../../utils/mockData';
@@ -15,7 +15,6 @@ interface RestaurantMenuProps {
 
 export function RestaurantMenu({
   restaurant,
-  customer,
   cart,
   onAddToCart,
   onUpdateQuantity,
@@ -53,13 +52,13 @@ export function RestaurantMenu({
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-[#0F1825]">
-      {/* Restaurant Header */}
-      <div className="bg-[#1A2332] shadow-md border-b border-[#334155]">
+    <div className="min-h-screen bg-gray-50">
+      {/* restaurant header */}
+      <div className="bg-white shadow-md border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-[#3B82F6] hover:text-[#2563EB] mb-4"
+            className="flex items-center gap-2 text-[#fc542e] hover:text-[#e64820] mb-4 font-medium"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Restaurants
@@ -73,22 +72,22 @@ export function RestaurantMenu({
             <div className="flex-1">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-white mb-2">{restaurant.name}</h2>
-                  <p className="text-[#9CA3AF] mb-3">{restaurant.description}</p>
+                  <h2 className="text-[#1a1a1a] mb-2 font-bold">{restaurant.name}</h2>
+                  <p className="text-gray-600 mb-3">{restaurant.description}</p>
                   <div className="flex items-center gap-3">
-                    <span className="px-3 py-1 bg-[#10B981]/20 text-[#10B981] rounded-full text-sm border border-[#10B981]">
+                    <span className="px-3 py-1 bg-[#fc542e]/10 text-[#fc542e] rounded-full text-sm border border-[#fc542e] font-medium">
                       {restaurant.area}
                     </span>
-                    <span className="text-sm text-[#9CA3AF]">{restaurant.phone}</span>
+                    <span className="text-sm text-gray-600">{restaurant.phone}</span>
                   </div>
                 </div>
                 {cartItemCount > 0 && (
                   <button
                     onClick={onViewCart}
-                    className="relative flex items-center gap-2 px-10 py-8 bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white rounded-lg hover:shadow-lg transition-all border-2 border-[#3B82F6]"
+                    className="relative flex items-center gap-2 px-10 py-8 bg-[#fc542e] text-white rounded-lg hover:bg-[#e64820] hover:shadow-lg transition-all font-bold"
                   >
                     <ShoppingCart className="w-10 h-10" />
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-6 h-6 flex items-center justify-center rounded-full">
+                    <span className="absolute -top-2 -right-2 bg-[#1a1a1a] text-white text-xs w-6 h-6 flex items-center justify-center rounded-full font-bold">
                       {cartItemCount}
                     </span>
                   </button>
@@ -99,9 +98,9 @@ export function RestaurantMenu({
         </div>
       </div>
 
-      {/* Menu Items */}
+      {/* menu items */}
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <h3 className="text-white mb-6">Menu</h3>
+        <h3 className="text-[#1a1a1a] mb-6 font-bold">Menu</h3>
 
         <div className="space-y-4">
           {menuItems.map(meal => {
@@ -110,7 +109,7 @@ export function RestaurantMenu({
             return (
               <div
                 key={meal.dishId}
-                className="bg-[#1E293B] rounded-lg shadow-md p-4 hover:shadow-lg transition-all border border-[#334155]"
+                className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-all border border-gray-200"
               >
                 <div className="flex gap-4">
                   <img
@@ -121,11 +120,11 @@ export function RestaurantMenu({
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <h4 className="text-white mb-1">{meal.name}</h4>
-                        <p className="text-sm text-[#9CA3AF] mb-2">{meal.description}</p>
+                        <h4 className="text-[#1a1a1a] mb-1 font-semibold">{meal.name}</h4>
+                        <p className="text-sm text-gray-600 mb-2">{meal.description}</p>
                         <div className="flex items-center gap-3 text-sm">
-                          <span className="text-[#10B981]">${meal.price.toFixed(2)}</span>
-                          <span className="text-[#9CA3AF]">Prep: {meal.prepTime} min</span>
+                          <span className="text-[#fc542e] font-bold">${meal.price.toFixed(2)}</span>
+                          <span className="text-gray-600">Prep: {meal.prepTime} min</span>
                         </div>
                       </div>
                     </div>
@@ -133,27 +132,27 @@ export function RestaurantMenu({
                     <div className="flex items-center gap-3 mt-4">
                       {quantityInCart > 0 ? (
                         <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-2 bg-[#0F1825] rounded-lg p-1 border border-[#334155]">
+                          <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-1 border border-gray-300">
                             <button
                               onClick={() => onUpdateQuantity(meal.dishId, quantityInCart - 1)}
-                              className="w-8 h-8 flex items-center justify-center bg-[#1E293B] rounded-md hover:bg-[#334155] text-[#3B82F6] transition-colors border border-[#334155]"
+                              className="w-8 h-8 flex items-center justify-center bg-white rounded-md hover:bg-gray-100 text-[#fc542e] transition-colors border border-gray-300"
                             >
                               <Minus className="w-4 h-4" />
                             </button>
-                            <span className="w-8 text-center text-white">{quantityInCart}</span>
+                            <span className="w-8 text-center text-[#1a1a1a] font-medium">{quantityInCart}</span>
                             <button
                               onClick={() => onUpdateQuantity(meal.dishId, quantityInCart + 1)}
-                              className="w-8 h-8 flex items-center justify-center bg-[#1E293B] rounded-md hover:bg-[#334155] text-[#3B82F6] transition-colors border border-[#334155]"
+                              className="w-8 h-8 flex items-center justify-center bg-white rounded-md hover:bg-gray-100 text-[#fc542e] transition-colors border border-gray-300"
                             >
                               <Plus className="w-4 h-4" />
                             </button>
                           </div>
-                          <span className="text-sm text-[#10B981]">Added to cart</span>
+                          <span className="text-sm text-[#fc542e] font-medium">Added to cart</span>
                         </div>
                       ) : (
                         <button
                           onClick={() => handleAddToCart(meal)}
-                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white rounded-lg hover:shadow-lg transition-all border-2 border-[#3B82F6]"
+                          className="flex items-center gap-2 px-4 py-2 bg-[#fc542e] text-white rounded-lg hover:bg-[#e64820] hover:shadow-lg transition-all font-bold"
                         >
                           <Plus className="w-4 h-4" />
                           Add to Cart
@@ -168,8 +167,8 @@ export function RestaurantMenu({
         </div>
 
         {menuItems.length === 0 && (
-          <div className="text-center py-12 bg-[#1E293B] rounded-lg border border-[#334155]">
-            <p className="text-[#9CA3AF]">No menu items available</p>
+          <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+            <p className="text-gray-600">No menu items available</p>
           </div>
         )}
 
@@ -177,7 +176,7 @@ export function RestaurantMenu({
           <div className="mt-8">
             <button
               onClick={onViewCart}
-              className="w-full py-4 bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 border-2 border-[#3B82F6]"
+              className="w-full py-4 bg-[#fc542e] text-white rounded-lg hover:bg-[#e64820] hover:shadow-lg transition-all flex items-center justify-center gap-2 font-bold"
             >
               <ShoppingCart className="w-5 h-5" />
               <span>View Cart ({cartItemCount} items)</span>

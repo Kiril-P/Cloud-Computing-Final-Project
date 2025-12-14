@@ -112,11 +112,6 @@ export default function App() {
     setCart([]);
   };
 
-  const handlePlaceOrder = () => {
-    setCart([]);
-    setView('customer-browse');
-  };
-
   const handleUpdateCustomer = (customer: Customer) => {
     setCurrentCustomer(customer);
   };
@@ -225,7 +220,6 @@ export default function App() {
                 customer={currentCustomer}
                 cart={cart}
                 onBack={handleBackToRestaurantBrowse}
-                onPlaceOrder={handlePlaceOrder}
                 onClearCart={handleClearCart}
                 onUpdateQuantity={handleUpdateQuantity}
               />

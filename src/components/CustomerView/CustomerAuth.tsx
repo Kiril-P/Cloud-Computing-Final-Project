@@ -22,7 +22,7 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
     phone: ''
   });
 
-  const handleCreateCustomer = () => {
+  const handleCreateCustomer = async () => {
     if (!formData.name || !formData.lastName || !formData.address || !formData.phone) {
       alert('Please fill in all required fields');
       return;
@@ -48,6 +48,35 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
       phone: formData.phone
     };
 
+    const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
+    
+    // send customer to azure customerapi
+    try {
+      const res = await fetch(`${API_BASE}/customerapi`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          area: newCustomer.area,
+          customerId: newCustomer.customerId,
+          name: newCustomer.name,
+          lastName: newCustomer.lastName,
+          address: newCustomer.address,
+          phone: newCustomer.phone
+        })
+      });
+
+      if (!res.ok) {
+        console.error('CustomerApi POST error', await res.text());
+        alert('Failed to create customer in Azure');
+        return;
+      }
+    } catch (err) {
+      console.error('Failed to create customer in Azure', err);
+      alert('Failed to create customer in Azure');
+      return;
+    }
+
+    // update local storage for immediate ui update
     saveCustomers([...allCustomers, newCustomer]);
     onCustomerSelect(newCustomer);
   };
@@ -62,13 +91,13 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
 
   if (view === 'choice') {
     return (
-      <div className="min-h-screen bg-[#0F1825] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="max-w-4xl w-full">
-          {/* Back Button */}
+          {/* back button */}
           <div className="mb-6">
             <button
               onClick={onBack}
-              className="flex items-center gap-2 px-4 py-2 border-2 border-[#334155] rounded-lg text-[#9CA3AF] hover:text-white hover:border-[#3B82F6] transition-colors bg-[#1E293B]"
+              className="flex items-center gap-2 px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-700 hover:text-[#fc542e] hover:border-[#fc542e] transition-colors bg-white font-medium"
             >
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Home</span>
@@ -76,35 +105,35 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
           </div>
 
           <div className="text-center mb-12">
-            <h1 className="mb-4 text-white">
+            <h1 className="mb-4 text-[#1a1a1a] font-bold">
               Welcome to NomNomNow
             </h1>
-            <p className="text-xl text-[#9CA3AF]">How would you like to continue?</p>
+            <p className="text-xl text-gray-600">How would you like to continue?</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             <button
               onClick={() => setView('create')}
-              className="group bg-[#1E293B] rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 border-2 border-[#334155] hover:border-[#10B981]"
+              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border-2 border-gray-200 hover:border-[#fc542e]"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-[#10B981] to-[#059669] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#fc542e] to-[#e64820] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <UserPlus className="w-10 h-10 text-white" />
               </div>
-              <h2 className="mb-3 text-white">New Customer</h2>
-              <p className="text-[#9CA3AF]">
+              <h2 className="mb-3 text-[#1a1a1a] font-bold">New Customer</h2>
+              <p className="text-gray-600">
                 Create a new account to start ordering
               </p>
             </button>
 
             <button
               onClick={() => setView('select')}
-              className="group bg-[#1E293B] rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 border-2 border-[#334155] hover:border-[#3B82F6]"
+              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border-2 border-gray-200 hover:border-[#fc542e]"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#fc542e] to-[#e64820] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <Users className="w-10 h-10 text-white" />
               </div>
-              <h2 className="mb-3 text-white">Existing Customer</h2>
-              <p className="text-[#9CA3AF]">
+              <h2 className="mb-3 text-[#1a1a1a] font-bold">Existing Customer</h2>
+              <p className="text-gray-600">
                 Sign in to your account to continue ordering
               </p>
             </button>
@@ -116,48 +145,48 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
 
   if (view === 'create') {
     return (
-      <div className="min-h-screen bg-[#0F1825] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="max-w-2xl w-full">
-          <div className="bg-[#1E293B] rounded-2xl shadow-xl p-8 border border-[#334155]">
-            <h2 className="text-white mb-6">Create New Account</h2>
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+            <h2 className="text-[#1a1a1a] mb-6 font-bold">Create New Account</h2>
             
             <div className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-white mb-2">
-                    First Name <span className="text-red-500">*</span>
+                  <label className="block text-gray-700 mb-2 font-medium">
+                    First Name <span className="text-[#fc542e]">*</span>
                   </label>
                   <input
                     type="text"
                     value={formData.name || ''}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2 bg-[#0F1825] border border-[#334155] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] text-white placeholder-[#9CA3AF]"
+                    className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 placeholder-gray-500"
                     placeholder="John"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-white mb-2">
-                    Last Name <span className="text-red-500">*</span>
+                  <label className="block text-gray-700 mb-2 font-medium">
+                    Last Name <span className="text-[#fc542e]">*</span>
                   </label>
                   <input
                     type="text"
                     value={formData.lastName || ''}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className="w-full px-4 py-2 bg-[#0F1825] border border-[#334155] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] text-white placeholder-[#9CA3AF]"
+                    className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 placeholder-gray-500"
                     placeholder="Doe"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-white mb-2">
-                  Area <span className="text-red-500">*</span>
+                <label className="block text-gray-700 mb-2 font-medium">
+                  Area <span className="text-[#fc542e]">*</span>
                 </label>
                 <select
                   value={formData.area}
                   onChange={(e) => setFormData({ ...formData, area: e.target.value as Area })}
-                  className="w-full px-4 py-2 bg-[#0F1825] border border-[#334155] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] text-white"
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 font-medium"
                 >
                   <option value="North">North</option>
                   <option value="East">East</option>
@@ -166,27 +195,27 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
               </div>
 
               <div>
-                <label className="block text-white mb-2">
-                  Address <span className="text-red-500">*</span>
+                <label className="block text-gray-700 mb-2 font-medium">
+                  Address <span className="text-[#fc542e]">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.address || ''}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-4 py-2 bg-[#0F1825] border border-[#334155] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] text-white placeholder-[#9CA3AF]"
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 placeholder-gray-500"
                   placeholder="123 Main Street"
                 />
               </div>
 
               <div>
-                <label className="block text-white mb-2">
-                  Phone <span className="text-red-500">*</span>
+                <label className="block text-gray-700 mb-2 font-medium">
+                  Phone <span className="text-[#fc542e]">*</span>
                 </label>
                 <input
                   type="tel"
                   value={formData.phone || ''}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-2 bg-[#0F1825] border border-[#334155] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#10B981] text-white placeholder-[#9CA3AF]"
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 placeholder-gray-500"
                   placeholder="555-1234"
                 />
               </div>
@@ -195,13 +224,13 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
             <div className="flex gap-3 mt-8">
               <button
                 onClick={() => setView('choice')}
-                className="flex-1 px-6 py-3 border-2 border-[#334155] text-[#9CA3AF] rounded-lg hover:bg-[#334155] hover:text-white transition-colors"
+                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 Back
               </button>
               <button
                 onClick={handleCreateCustomer}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white rounded-lg hover:shadow-lg transition-all border-2 border-[#3B82F6]"
+                className="flex-1 px-6 py-3 bg-[#fc542e] text-white rounded-lg hover:bg-[#e64820] hover:shadow-lg transition-all font-bold"
               >
                 Create Account
               </button>
@@ -213,11 +242,11 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0F1825]">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-white mb-2">Select Your Account</h2>
-          <p className="text-[#9CA3AF]">Choose your customer profile to continue</p>
+          <h2 className="text-[#1a1a1a] mb-2 font-bold">Select Your Account</h2>
+          <p className="text-gray-600">Choose your customer profile to continue</p>
         </div>
 
         <SearchAndFilter
@@ -232,18 +261,18 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
             <button
               key={customer.customerId}
               onClick={() => onCustomerSelect(customer)}
-              className="bg-[#1E293B] rounded-lg shadow-md hover:shadow-xl transition-all p-6 text-left group border-2 border-[#334155] hover:border-[#10B981]"
+              className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all p-6 text-left group border-2 border-gray-200 hover:border-[#fc542e]"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#3B82F6] to-[#10B981] rounded-full flex items-center justify-center text-white">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#fc542e] to-[#e64820] rounded-full flex items-center justify-center text-white font-bold">
                   {customer.name[0]}{customer.lastName[0]}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-white">{customer.name} {customer.lastName}</h3>
-                  <span className="text-sm text-[#10B981]">{customer.area}</span>
+                  <h3 className="text-[#1a1a1a] font-semibold">{customer.name} {customer.lastName}</h3>
+                  <span className="text-sm text-[#fc542e] font-medium">{customer.area}</span>
                 </div>
               </div>
-              <div className="text-sm text-[#9CA3AF] space-y-1">
+              <div className="text-sm text-gray-600 space-y-1">
                 <p className="line-clamp-1">{customer.address}</p>
                 <p>{customer.phone}</p>
               </div>
@@ -253,14 +282,14 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
 
         {filteredCustomers.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-[#9CA3AF] mb-4">No customers found</p>
+            <p className="text-gray-600 mb-4">No customers found</p>
           </div>
         )}
 
         <div className="mt-6">
           <button
             onClick={() => setView('choice')}
-            className="px-4 py-2 border-2 border-[#334155] rounded-lg text-[#3B82F6] hover:bg-[#334155] hover:text-white transition-colors bg-[#1E293B]"
+            className="px-4 py-2 border-2 border-gray-300 rounded-lg text-[#fc542e] hover:bg-gray-100 transition-colors bg-white font-medium"
           >
             ← Back to options
           </button>

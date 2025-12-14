@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft, Save, Plus, Trash2, Edit2 } from 'lucide-react';
 import type { Restaurant, MenuItem, Area } from '../../types';
 import { getMenuItems, saveRestaurants, saveMenuItems, getRestaurants } from '../../utils/mockData';
@@ -205,23 +205,23 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-[var(--primary-blue)] hover:text-[var(--dark-blue)] mb-6"
+          className="flex items-center gap-2 text-[#fc542e] hover:text-[#e64820] mb-6 font-medium"
         >
           <ArrowLeft className="w-5 h-5" />
           Back to Restaurants
         </button>
 
-        {/* Restaurant Details */}
-        <div className="bg-[var(--bg-card)] rounded-lg shadow-md p-6 mb-8 border border-[var(--border-color)]">
+        {/* restaurant details */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-gray-200">
           <div className="flex justify-between items-start mb-6">
-            <h2 className="text-[var(--text-primary)]">Restaurant Details</h2>
+            <h2 className="text-[#1a1a1a] font-bold">Restaurant Details</h2>
             <button
               onClick={handleSaveRestaurant}
-              className="flex items-center gap-2 bg-[var(--primary-green)] text-white px-4 py-2 rounded-lg hover:bg-[var(--dark-green)] transition-colors"
+              className="flex items-center gap-2 bg-[#fc542e] text-white px-4 py-2 rounded-lg hover:bg-[#e64820] transition-colors font-bold shadow-md"
             >
               <Save className="w-4 h-4" />
               Save Changes
@@ -230,21 +230,21 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">Restaurant Name</label>
+              <label className="block text-gray-700 mb-2 font-medium">Restaurant Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
               />
             </div>
 
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">Area</label>
+              <label className="block text-gray-700 mb-2 font-medium">Area</label>
               <select
                 value={formData.area}
                 onChange={(e) => setFormData({ ...formData, area: e.target.value as Area })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 font-medium"
               >
                 <option value="North">North</option>
                 <option value="East">East</option>
@@ -253,51 +253,51 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
             </div>
 
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">Phone</label>
+              <label className="block text-gray-700 mb-2 font-medium">Phone</label>
               <input
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
               />
             </div>
 
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">Image URL</label>
+              <label className="block text-gray-700 mb-2 font-medium">Image URL</label>
               <input
                 type="url"
                 value={formData.image}
                 onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-[var(--text-primary)] mb-2">Address</label>
+              <label className="block text-gray-700 mb-2 font-medium">Address</label>
               <input
                 type="text"
                 value={formData.address}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-[var(--text-primary)] mb-2">Description</label>
+              <label className="block text-gray-700 mb-2 font-medium">Description</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
               />
             </div>
           </div>
         </div>
 
-        {/* Menu Items */}
-        <div className="bg-[var(--bg-card)] rounded-lg shadow-md p-6 border border-[var(--border-color)]">
+        {/* menu items */}
+        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-[var(--text-primary)]">Menu Items</h3>
+            <h3 className="text-[#1a1a1a] font-bold">Menu Items</h3>
             <button
               onClick={() => setNewMeal({
                 name: '',
@@ -307,7 +307,7 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
                 price: 0,
                 image: 'https://images.unsplash.com/photo-1661260652741-65340f04f2ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZWxpY2lvdXMlMjBmb29kJTIwbWVhbHxlbnwxfHx8fDE3NjM5NDgwMjd8MA&ixlib=rb-4.1.0&q=80&w=400'
               })}
-              className="flex items-center gap-2 bg-[var(--primary-blue)] text-white px-4 py-2 rounded-lg hover:bg-[var(--dark-blue)] transition-colors"
+              className="flex items-center gap-2 bg-[#fc542e] text-white px-4 py-2 rounded-lg hover:bg-[#e64820] transition-colors font-bold shadow-md"
             >
               <Plus className="w-4 h-4" />
               Add Meal
@@ -316,7 +316,7 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
 
           <div className="space-y-4">
             {menuItems.map(meal => (
-              <div key={meal.dishId} className="border border-[var(--border-color)] rounded-lg p-4 bg-[var(--bg-secondary)]">
+              <div key={meal.dishId} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
                 {editingMeal === meal.dishId ? (
                   <MealEditor
                     meal={meal}
@@ -333,12 +333,12 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h4 className="text-[var(--text-primary)] mb-1">{meal.name}</h4>
-                          <p className="text-sm text-[var(--text-secondary)] mb-2">{meal.description}</p>
+                          <h4 className="text-[#1a1a1a] mb-1 font-semibold">{meal.name}</h4>
+                          <p className="text-sm text-gray-600 mb-2">{meal.description}</p>
                           <div className="flex gap-4 text-sm">
-                            <span className="text-[var(--primary-green)]">${meal.price.toFixed(2)}</span>
-                            <span className="text-[var(--text-secondary)]">{meal.prepTime} min</span>
-                            <span className={meal.isAvailable ? 'text-[var(--primary-green)]' : 'text-red-500'}>
+                            <span className="text-[#fc542e] font-bold">${meal.price.toFixed(2)}</span>
+                            <span className="text-gray-600">{meal.prepTime} min</span>
+                            <span className={meal.isAvailable ? 'text-[#fc542e] font-medium' : 'text-red-500'}>
                               {meal.isAvailable ? 'Available' : 'Unavailable'}
                             </span>
                           </div>
@@ -346,13 +346,13 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
                         <div className="flex gap-2">
                           <button
                             onClick={() => setEditingMeal(meal.dishId)}
-                            className="p-2 text-[var(--primary-blue)] hover:bg-blue-950/30 rounded-lg transition-colors"
+                            className="p-2 text-[#fc542e] hover:bg-gray-100 rounded-lg transition-colors"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteMeal(meal.dishId)}
-                            className="p-2 text-red-500 hover:bg-red-950/30 rounded-lg transition-colors"
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -365,8 +365,8 @@ export function RestaurantProfile({ restaurant, onBack }: RestaurantProfileProps
             ))}
 
             {newMeal && (
-              <div className="border-2 border-dashed border-[var(--primary-blue)] rounded-lg p-4 bg-[var(--bg-secondary)]">
-                <h4 className="text-[var(--text-primary)] mb-4">New Meal</h4>
+              <div className="border-2 border-dashed border-[#fc542e] rounded-lg p-4 bg-white">
+                <h4 className="text-[#1a1a1a] mb-4 font-bold">New Meal</h4>
                 <MealEditor
                   meal={newMeal as MenuItem}
                   onSave={handleAddNewMeal}
@@ -403,33 +403,33 @@ function MealEditor({ meal, onSave, onCancel, isNew = false }: MealEditorProps) 
   return (
     <div className="grid md:grid-cols-2 gap-4">
       <div>
-        <label className="block text-[var(--text-primary)] mb-1 text-sm">Name</label>
+        <label className="block text-gray-700 mb-1 text-sm font-medium">Name</label>
         <input
           type="text"
           value={formData.name || ''}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+          className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-[var(--text-primary)] mb-1 text-sm">Price ($)</label>
+        <label className="block text-gray-700 mb-1 text-sm font-medium">Price ($)</label>
         <input
           type="number"
           step="0.01"
           value={formData.price || 0}
           onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-          className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+          className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-[var(--text-primary)] mb-1 text-sm">Prep Time (min)</label>
+        <label className="block text-gray-700 mb-1 text-sm font-medium">Prep Time (min)</label>
         <input
           type="number"
           value={formData.prepTime || 0}
           onChange={(e) => setFormData({ ...formData, prepTime: parseInt(e.target.value) })}
-          className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+          className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
         />
       </div>
 
@@ -439,42 +439,42 @@ function MealEditor({ meal, onSave, onCancel, isNew = false }: MealEditorProps) 
             type="checkbox"
             checked={formData.isAvailable ?? true}
             onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
-            className="w-4 h-4 text-[var(--primary-green)] focus:ring-[var(--primary-green)] rounded bg-[var(--bg-primary)] border-[var(--border-color)]"
+            className="w-4 h-4 text-[#fc542e] focus:ring-[#fc542e] rounded bg-gray-50 border-gray-300"
           />
-          <span className="text-sm text-[var(--text-primary)]">Available</span>
+          <span className="text-sm text-gray-700 font-medium">Available</span>
         </label>
       </div>
 
       <div className="md:col-span-2">
-        <label className="block text-[var(--text-primary)] mb-1 text-sm">Description</label>
+        <label className="block text-gray-700 mb-1 text-sm font-medium">Description</label>
         <textarea
           value={formData.description || ''}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows={2}
-          className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+          className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
         />
       </div>
 
       <div className="md:col-span-2">
-        <label className="block text-[var(--text-primary)] mb-1 text-sm">Image URL</label>
+        <label className="block text-gray-700 mb-1 text-sm font-medium">Image URL</label>
         <input
           type="url"
           value={formData.image || ''}
           onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-          className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+          className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
         />
       </div>
 
       <div className="md:col-span-2 flex justify-end gap-2">
         <button
           onClick={onCancel}
-          className="px-4 py-2 text-[var(--text-secondary)] hover:bg-[var(--bg-primary)] rounded-lg transition-colors"
+          className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors border border-gray-300 font-medium"
         >
           Cancel
         </button>
         <button
           onClick={handleSubmit}
-          className="px-4 py-2 bg-[var(--primary-green)] text-white rounded-lg hover:bg-[var(--dark-green)] transition-colors"
+          className="px-4 py-2 bg-[#fc542e] text-white rounded-lg hover:bg-[#e64820] transition-colors font-bold shadow-md"
         >
           {isNew ? 'Add Meal' : 'Save'}
         </button>

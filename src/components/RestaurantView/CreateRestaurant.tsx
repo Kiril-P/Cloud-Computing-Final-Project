@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, Save, Plus, X } from 'lucide-react';
 import type { Restaurant, MenuItem, Area } from '../../types';
 import { getRestaurants, saveRestaurants, getMenuItems, saveMenuItems } from '../../utils/mockData';
@@ -149,25 +149,25 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 px-4 py-2 border-2 border-[var(--primary-blue)] text-[var(--primary-blue)] hover:bg-[var(--primary-blue)] hover:text-white rounded-lg transition-colors mb-6"
+          className="flex items-center gap-2 px-4 py-2 border-2 border-[#fc542e] text-[#fc542e] hover:bg-[#fc542e] hover:text-white rounded-lg transition-colors mb-6 font-medium"
         >
           <ArrowLeft className="w-5 h-5" />
           Back to Restaurants
         </button>
 
-        <div className="bg-[var(--bg-card)] rounded-lg shadow-md p-6 mb-8 border border-[var(--border-color)]">
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-gray-200">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="text-[var(--text-primary)]">Create New Restaurant</h2>
-              <p className="text-[var(--text-secondary)] mt-1">Fill in the details for your new restaurant</p>
+              <h2 className="text-[#1a1a1a] font-bold">Create New Restaurant</h2>
+              <p className="text-gray-600 mt-1">Fill in the details for your new restaurant</p>
             </div>
             <button
               onClick={handleCreateRestaurant}
-              className="flex items-center gap-2 bg-gradient-to-r from-[var(--primary-blue)] to-[var(--primary-green)] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all"
+              className="flex items-center gap-2 bg-[#fc542e] text-white px-6 py-3 rounded-lg hover:bg-[#e64820] hover:shadow-lg transition-all font-bold shadow-md"
             >
               <Save className="w-5 h-5" />
               Create Restaurant
@@ -176,26 +176,26 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">
-                Restaurant Name <span className="text-red-500">*</span>
+              <label className="block text-gray-700 mb-2 font-medium">
+                Restaurant Name <span className="text-[#fc542e]">*</span>
               </label>
               <input
                 type="text"
                 value={formData.name || ''}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
                 placeholder="Enter restaurant name"
               />
             </div>
 
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">
-                Area <span className="text-red-500">*</span>
+              <label className="block text-gray-700 mb-2 font-medium">
+                Area <span className="text-[#fc542e]">*</span>
               </label>
               <select
                 value={formData.area}
                 onChange={(e) => setFormData({ ...formData, area: e.target.value as Area })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 font-medium"
               >
                 <option value="North">North</option>
                 <option value="East">East</option>
@@ -204,66 +204,66 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
             </div>
 
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">
-                Phone <span className="text-red-500">*</span>
+              <label className="block text-gray-700 mb-2 font-medium">
+                Phone <span className="text-[#fc542e]">*</span>
               </label>
               <input
                 type="tel"
                 value={formData.phone || ''}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
                 placeholder="555-1234"
               />
             </div>
 
             <div>
-              <label className="block text-[var(--text-primary)] mb-2">Image URL</label>
+              <label className="block text-gray-700 mb-2 font-medium">Image URL</label>
               <input
                 type="url"
                 value={formData.image || ''}
                 onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
                 placeholder="https://example.com/image.jpg"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-[var(--text-primary)] mb-2">
-                Address <span className="text-red-500">*</span>
+              <label className="block text-gray-700 mb-2 font-medium">
+                Address <span className="text-[#fc542e]">*</span>
               </label>
               <input
                 type="text"
                 value={formData.address || ''}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
                 placeholder="123 Main Street"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-[var(--text-primary)] mb-2">Description</label>
+              <label className="block text-gray-700 mb-2 font-medium">Description</label>
               <textarea
                 value={formData.description || ''}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)]"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900"
                 placeholder="Describe your restaurant"
               />
             </div>
           </div>
         </div>
 
-        {/* Meals Section */}
-        <div className="bg-[var(--bg-card)] rounded-lg shadow-md p-6 border border-[var(--border-color)]">
+        {/* meals section */}
+        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h3 className="text-[var(--text-primary)]">Menu Items</h3>
-              <p className="text-[var(--text-secondary)] text-sm mt-1">Add meals to your restaurant menu (optional)</p>
+              <h3 className="text-[#1a1a1a] font-bold">Menu Items</h3>
+              <p className="text-gray-600 text-sm mt-1">Add meals to your restaurant menu (optional)</p>
             </div>
             {!showMealForm && (
               <button
                 onClick={() => setShowMealForm(true)}
-                className="flex items-center gap-2 bg-[var(--primary-blue)] text-white px-4 py-2 rounded-lg hover:bg-[var(--dark-blue)] transition-colors"
+                className="flex items-center gap-2 bg-[#fc542e] text-white px-4 py-2 rounded-lg hover:bg-[#e64820] transition-colors font-bold shadow-md"
               >
                 <Plus className="w-4 h-4" />
                 Add Meal
@@ -281,22 +281,22 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
           {meals.length > 0 && (
             <div className="space-y-3 mt-6">
               {meals.map((meal, index) => (
-                <div key={index} className="flex items-center gap-4 p-4 border border-[var(--border-color)] rounded-lg bg-[var(--bg-secondary)]">
+                <div key={index} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
                   <img
                     src={meal.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop'}
                     alt={meal.name}
                     className="w-16 h-16 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <h4 className="text-[var(--text-primary)]">{meal.name}</h4>
-                    <div className="flex gap-3 text-sm text-[var(--text-secondary)] mt-1">
-                      <span className="text-[var(--primary-green)]">${meal.price?.toFixed(2)}</span>
+                    <h4 className="text-[#1a1a1a] font-semibold">{meal.name}</h4>
+                    <div className="flex gap-3 text-sm text-gray-600 mt-1">
+                      <span className="text-[#fc542e] font-bold">${meal.price?.toFixed(2)}</span>
                       <span>{meal.prepTime} min</span>
                     </div>
                   </div>
                   <button
                     onClick={() => handleRemoveMeal(index)}
-                    className="p-2 text-red-500 hover:bg-red-950/30 rounded-lg transition-colors"
+                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -306,7 +306,7 @@ export function CreateRestaurant({ onBack, onSuccess }: CreateRestaurantProps) {
           )}
 
           {meals.length === 0 && !showMealForm && (
-            <div className="text-center py-8 text-[var(--text-secondary)]">
+            <div className="text-center py-8 text-gray-600">
               No meals added yet. Click "Add Meal" to start building your menu.
             </div>
           )}
@@ -340,43 +340,43 @@ function NewMealForm({ onAdd, onCancel }: NewMealFormProps) {
   };
 
   return (
-    <div className="border-2 border-dashed border-[var(--primary-blue)] rounded-lg p-4 bg-[var(--bg-secondary)]">
-      <h4 className="text-[var(--text-primary)] mb-4">New Meal</h4>
+    <div className="border-2 border-dashed border-[#fc542e] rounded-lg p-4 bg-white">
+      <h4 className="text-[#1a1a1a] mb-4 font-bold">New Meal</h4>
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-[var(--text-primary)] mb-1 text-sm">
-            Name <span className="text-red-500">*</span>
+          <label className="block text-gray-700 mb-1 text-sm font-medium">
+            Name <span className="text-[#fc542e]">*</span>
           </label>
           <input
             type="text"
             value={formData.name || ''}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+            className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
             placeholder="Meal name"
           />
         </div>
 
         <div>
-          <label className="block text-[var(--text-primary)] mb-1 text-sm">
-            Price ($) <span className="text-red-500">*</span>
+          <label className="block text-gray-700 mb-1 text-sm font-medium">
+            Price ($) <span className="text-[#fc542e]">*</span>
           </label>
           <input
             type="number"
             step="0.01"
             value={formData.price || ''}
             onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-            className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+            className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
             placeholder="0.00"
           />
         </div>
 
         <div>
-          <label className="block text-[var(--text-primary)] mb-1 text-sm">Prep Time (min)</label>
+          <label className="block text-gray-700 mb-1 text-sm font-medium">Prep Time (min)</label>
           <input
             type="number"
             value={formData.prepTime || ''}
             onChange={(e) => setFormData({ ...formData, prepTime: parseInt(e.target.value) })}
-            className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+            className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
             placeholder="15"
           />
         </div>
@@ -387,30 +387,30 @@ function NewMealForm({ onAdd, onCancel }: NewMealFormProps) {
               type="checkbox"
               checked={formData.isAvailable ?? true}
               onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
-              className="w-4 h-4 text-[var(--primary-green)] focus:ring-[var(--primary-green)] rounded bg-[var(--bg-primary)] border-[var(--border-color)]"
+              className="w-4 h-4 text-[#fc542e] focus:ring-[#fc542e] rounded bg-gray-50 border-gray-300"
             />
-            <span className="text-sm text-[var(--text-primary)]">Available</span>
+            <span className="text-sm text-gray-700 font-medium">Available</span>
           </label>
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-[var(--text-primary)] mb-1 text-sm">Description</label>
+          <label className="block text-gray-700 mb-1 text-sm font-medium">Description</label>
           <textarea
             value={formData.description || ''}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             rows={2}
-            className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+            className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
             placeholder="Describe the meal"
           />
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-[var(--text-primary)] mb-1 text-sm">Image URL</label>
+          <label className="block text-gray-700 mb-1 text-sm font-medium">Image URL</label>
           <input
             type="url"
             value={formData.image || ''}
             onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-            className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-blue)] text-[var(--text-primary)] text-sm"
+            className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fc542e] text-gray-900 text-sm"
             placeholder="https://example.com/image.jpg"
           />
         </div>
@@ -418,13 +418,13 @@ function NewMealForm({ onAdd, onCancel }: NewMealFormProps) {
         <div className="md:col-span-2 flex justify-end gap-2">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-[var(--text-secondary)] hover:bg-[var(--bg-primary)] rounded-lg transition-colors"
+            className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors border border-gray-300 font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-[var(--primary-green)] text-white rounded-lg hover:bg-[var(--dark-green)] transition-colors"
+            className="px-4 py-2 bg-[#fc542e] text-white rounded-lg hover:bg-[#e64820] transition-colors font-bold shadow-md"
           >
             Add Meal
           </button>
