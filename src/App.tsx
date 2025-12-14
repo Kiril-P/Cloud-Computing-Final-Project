@@ -108,6 +108,10 @@ export default function App() {
     setView('customer-profile');
   };
 
+  const handleClearCart = () => {
+    setCart([]);
+  };
+
   const handlePlaceOrder = () => {
     setCart([]);
     setView('customer-browse');
@@ -222,6 +226,7 @@ export default function App() {
                 cart={cart}
                 onBack={handleBackToRestaurantBrowse}
                 onPlaceOrder={handlePlaceOrder}
+                onClearCart={handleClearCart}
                 onUpdateQuantity={handleUpdateQuantity}
               />
             )}

@@ -8,10 +8,11 @@ interface OrderSummaryProps {
   cart: OrderItem[];
   onBack: () => void;
   onPlaceOrder: () => void;
+  onClearCart: () => void;
   onUpdateQuantity: (dishId: string, quantity: number) => void;
 }
 
-export function OrderSummary({ customer, cart, onBack, onPlaceOrder, onUpdateQuantity }: OrderSummaryProps) {
+export function OrderSummary({ customer, cart, onBack, onPlaceOrder, onClearCart, onUpdateQuantity }: OrderSummaryProps) {
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   // Group cart items by restaurant
@@ -104,6 +105,9 @@ export function OrderSummary({ customer, cart, onBack, onPlaceOrder, onUpdateQua
     const allOrders = getOrders();
     saveOrders([...allOrders, newOrder]);
     setOrderPlaced(true);
+    
+    // clear the cart (but don't change view yet - confirmation screen will show)
+    onClearCart();
   };
 
   if (orderPlaced) {
