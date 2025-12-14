@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { UserPlus, Users, ArrowLeft } from 'lucide-react';
 import type { Customer, Area } from '../../types';
 import { getCustomers, saveCustomers } from '../../utils/mockData';
@@ -11,7 +11,7 @@ interface CustomerAuthProps {
 
 export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
   const [view, setView] = useState<'choice' | 'create' | 'select'>('choice');
-  const [customers, setCustomers] = useState<Customer[]>(getCustomers());
+  const [customers] = useState<Customer[]>(getCustomers());
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedArea, setSelectedArea] = useState<Area | 'All'>('All');
   const [formData, setFormData] = useState<Partial<Customer>>({
@@ -28,16 +28,26 @@ export function CustomerAuth({ onCustomerSelect, onBack }: CustomerAuthProps) {
       return;
     }
 
+    // generate customer id in format C011, C012, etc.
+    const allCustomers = getCustomers();
+    const existingIds = allCustomers
+      .map(c => c.customerId)
+      .filter(id => /^C\d+$/.test(id))
+      .map(id => parseInt(id.substring(1), 10))
+      .filter(num => !isNaN(num));
+    
+    const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 11;
+    const customerId = `C${nextId.toString().padStart(3, '0')}`;
+
     const newCustomer: Customer = {
       area: formData.area as Area,
-      customerId: `cust-${Date.now()}`,
+      customerId,
       name: formData.name,
       lastName: formData.lastName,
       address: formData.address,
       phone: formData.phone
     };
 
-    const allCustomers = getCustomers();
     saveCustomers([...allCustomers, newCustomer]);
     onCustomerSelect(newCustomer);
   };

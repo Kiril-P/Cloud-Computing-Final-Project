@@ -57,7 +57,8 @@ export function OrderSummary({ customer, cart, onBack, onPlaceOrder, onUpdateQua
   const estimatedTime = calculateDeliveryTime();
   const estimatedArrival = new Date(Date.now() + estimatedTime * 60000).toLocaleTimeString('en-US', {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    hour12: true
   });
 
   const API_BASE = 'https://group2functions-btcnfpg4gmbefact.spaincentral-01.azurewebsites.net/api';
